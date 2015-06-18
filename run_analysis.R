@@ -90,3 +90,5 @@ data_out <- tbl_df(data_new) %>%
   summarise_each(funs(mean))
 
 # write the data
+f_output <- "./output.txt"
+write.table(data_out, file = f_output, row.names = FALSE)
