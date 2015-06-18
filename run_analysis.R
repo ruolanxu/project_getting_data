@@ -75,13 +75,18 @@ list_activity <- read.table(paste(dir, "activity_labels.txt", sep = ""),
 
 data_new$activity <- list_activity[data_new$activity, 2]
 
+
 ## 4.Appropriately labels the data set with descriptive variable names. 
 
-
+# Already done so in Step 1
 
 
 ## 5. From the data set in step 4, creates a second, independent tidy data 
 ## set with the average of each variable for each activity and each subject.
 
-# convert data_new into tbl
-data_new <- tbl_df(data_new)
+# using dplyr package to calculate the mean of variables based on groups
+data_out <- tbl_df(data_new) %>%
+  group_by(subject, activity) %>%
+  summarise_each(funs(mean))
+
+# write the data
