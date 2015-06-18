@@ -41,7 +41,12 @@ rm(data_train, data_test)
 
 
 ## 2. Extracts only the measurements on the mean and standard deviation 
-##for each measurement. 
+## for each measurement. 
+idx <- grepl("mean", colnames(data)) | 
+  grepl("std", colnames(data)) | 
+  grepl("subject", colnames(data))
+data_new <- data[, idx]
+rm(data)
 
 ## 3. Uses descriptive activity names to name the activities in the data set
 
