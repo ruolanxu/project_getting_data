@@ -8,20 +8,37 @@ rm(list = ls())
 # Set data directory and filenames
 dir <- "./UCI HAR Dataset/"
 f_data_train <- paste(dir, "train/X_train.txt", sep = "")
-f_data_test <- paste(dir, "train/X_test.txt", sep = "")
 f_subject_train <- paste(dir, "train/subject_train.txt", sep = "")
+f_data_test <- paste(dir, "test/X_test.txt", sep = "")
 f_subject_test <- paste(dir, "test/subject_test.txt", sep = "")
 
 # Read features
-features <- read.table(paste(dir, "features.txt", sep = ""), col.names = c("number", "feature"))
+features <- read.table(paste(dir, "features.txt", sep = ""), 
+                       col.names = c("number", "feature"))
 features <- features[[2]]
 
-# Read the training dataset & subject, combine
-raw_data_train <- read.table(f_data_train, header = FALSE, fill = TRUE, col.names = features)
+# Read the training dataset & subject, combine them
+raw_data_train <- read.table(f_data_train, header = FALSE, 
+                             fill = TRUE, col.names = features)
 subject_train <- read.table(f_subject_train, header = FALSE)
 colnames(subject_train) <- "subject"
+
 data_train <- cbind(subject_train, raw_data_train)
 rm(raw_data_train, subject_train)
+
+# Read the testing dataset & subject, combine them
+raw_data_test <- read.table(f_data_test, header = FALSE, 
+                            fill = TRUE, col.names = features)
+subject_test <- read.table(f_subject_test, header = FALSE)
+colnames(subject_test) <- "subject"
+
+data_test <- cbind(subject_test, raw_data_test)
+rm(raw_data_test, subject_test)
+
+# merge the training and testing dataset into one
+data <- rbind(data_train, data_test)
+rm(data_train, data_test)
+
 
 ## 2. Extracts only the measurements on the mean and standard deviation 
 ##for each measurement. 
