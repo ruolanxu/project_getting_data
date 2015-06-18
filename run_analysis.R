@@ -2,6 +2,9 @@
 # Written by Effi Xu
 # June 2015
 
+
+library(dplyr)
+
 rm(list = ls())
 ## 1. Merges the training and the test sets to create one data set.
 
@@ -50,6 +53,7 @@ rm(data_train, data_test)
 ## 2. Extracts only the measurements on the mean and standard deviation 
 ## for each measurement. 
 
+# convert 'data_new' to tbl format
 idx <- grepl("mean", colnames(data)) | 
   grepl("std", colnames(data)) | 
   grepl("subject", colnames(data)) |
@@ -60,11 +64,24 @@ data_new <- data[, idx]
 ## 3. Uses descriptive activity names to name the activities in the data set
 
 # Read descriptive activiey names
-activity <- read.table(paste(dir, "activity_labels.txt", sep = ""), 
-                            col.names = c("label", "activity"))
+list_activity <- read.table(paste(dir, "activity_labels.txt", sep = ""), 
+                            col.names = c("label", "activity"), stringsAsFactors = FALSE)
+
+# replace activity number with activity name
+# activity_name <- function(n) {
+#   return(list_activity[n,2])
+# }
+# data_new$activity <- sapply(data_new$activity, activity_name)
+
+data_new$activity <- list_activity[data_new$activity, 2]
 
 ## 4.Appropriately labels the data set with descriptive variable names. 
 
 
+
+
 ## 5. From the data set in step 4, creates a second, independent tidy data 
 ## set with the average of each variable for each activity and each subject.
+
+# convert data_new into tbl
+data_new <- tbl_df(data_new)
