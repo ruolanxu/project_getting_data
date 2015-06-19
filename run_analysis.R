@@ -2,14 +2,14 @@
 # Written by Effi Xu
 # June 2015
 
-
 library(dplyr)
-
 rm(list = ls())
+## Replace the dataset directory if it's not in the git
+dir <- "./UCI HAR Dataset/"
+
 ## 1. Merges the training and the test sets to create one data set.
 
 # Set data directory and filenames
-dir <- "./UCI HAR Dataset/"
 f_data_train <- paste(dir, "train/X_train.txt", sep = "")
 f_activity_train <- paste(dir, "train/y_train.txt", sep = "")
 f_subject_train <- paste(dir, "train/subject_train.txt", sep = "")
@@ -59,7 +59,7 @@ idx <- grepl("mean", colnames(data)) |
   grepl("subject", colnames(data)) |
   grepl("activity", colnames(data))
 data_new <- data[, idx]
-# rm(data)
+rm(data)
 
 ## 3. Uses descriptive activity names to name the activities in the data set
 
@@ -67,19 +67,12 @@ data_new <- data[, idx]
 list_activity <- read.table(paste(dir, "activity_labels.txt", sep = ""), 
                             col.names = c("label", "activity"), stringsAsFactors = FALSE)
 
-# replace activity number with activity name
-# activity_name <- function(n) {
-#   return(list_activity[n,2])
-# }
-# data_new$activity <- sapply(data_new$activity, activity_name)
-
 data_new$activity <- list_activity[data_new$activity, 2]
 
 
 ## 4.Appropriately labels the data set with descriptive variable names. 
 
 # Already done so in Step 1
-
 
 ## 5. From the data set in step 4, creates a second, independent tidy data 
 ## set with the average of each variable for each activity and each subject.
